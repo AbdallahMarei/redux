@@ -1,25 +1,27 @@
-import logo from './logo.svg';
+import {useSelector,useDispatch} from "react-redux"
 import './App.css';
+import {addItem,toggle} from "../src/redux/cart/cart-actions"
+
+
 
 function App() {
+  const shop = useSelector(state => state.shop)
+  const cart = useSelector(state => state.cart)
+  const dispatch = useDispatch()
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+      {shop.collections.map(item => <div key={item.id}><button onClick={()=>dispatch(addItem(item))}>{item.title}</button></div>)}
+      </div>
+      <div>
+        {cart.cartItems.map(item => <p key={item.id}>{item.quantity}</p>)}
+        <button onClick={()=>dispatch(toggle())}>Toggle</button>
+      </div>
+      <p>{cart.cartItems.reduce((total,item) => total + item.quantity * item.price, 0)}</p>
     </div>
   );
 }
+
 
 export default App;
